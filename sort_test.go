@@ -43,7 +43,7 @@ func BenchmarkBubbleSort(b *testing.B) {
 }
 
 func BenchmarkInsertionSort(b *testing.B) {
-    values := make([]int, 1000)
+	values := make([]int, 1000)
 	for j := range values {
 		values[j] = 1000
 	}
@@ -54,11 +54,24 @@ func BenchmarkInsertionSort(b *testing.B) {
 	}
 }
 
+func BenchmarkMergeSort(b *testing.B) {
+	values := make([]int, 1000)
+	for j := range values {
+		values[j] = 1000
+	}
+	for i := 0; i < b.N; i++ {
+		dest := make([]int, len(values))
+		copy(dest, values)
+		MergeSort(dest)
+	}
+}
+
+
 func TestInsertionSort(t *testing.T) {
 	for i := 0; i < 1000; i++ {
-		values := make([]int, rand.Intn(10000))
+		values := make([]int, rand.Intn(1000))
 		for j := range values {
-			values[j] = rand.Intn(10000)
+			values[j] = rand.Intn(1000)
 		}
 		InsertionSort(values)
 		if !isSorted(values) {
@@ -68,12 +81,25 @@ func TestInsertionSort(t *testing.T) {
 }
 
 func TestSelectionSort(t *testing.T) {
-    for i := 0; i < 1000; i++ {
-		values := make([]int, rand.Intn(10000))
+	for i := 0; i < 1000; i++ {
+		values := make([]int, rand.Intn(1000))
 		for j := range values {
-			values[j] = rand.Intn(10000)
+			values[j] = rand.Intn(1000)
 		}
 		SelectionSort(values)
+		if !isSorted(values) {
+			t.Error(values, "is not sorted")
+		}
+	}
+}
+
+func TestMergeSort(t *testing.T) {
+	for i := 0; i < 1000; i++ {
+		values := make([]int, rand.Intn(1000))
+		for j := range values {
+			values[j] = rand.Intn(1000)
+		}
+		MergeSort(values)
 		if !isSorted(values) {
 			t.Error(values, "is not sorted")
 		}

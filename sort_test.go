@@ -66,6 +66,17 @@ func BenchmarkMergeSort(b *testing.B) {
 	}
 }
 
+func BenchmarkConcMergeSort(b *testing.B) {
+	values := make([]int, 1000)
+	for j := range values {
+		values[j] = 1000
+	}
+	for i := 0; i < b.N; i++ {
+		dest := make([]int, len(values))
+		copy(dest, values)
+		ConcMergeSort(dest)
+	}
+}
 
 func TestInsertionSort(t *testing.T) {
 	for i := 0; i < 1000; i++ {
@@ -100,6 +111,19 @@ func TestMergeSort(t *testing.T) {
 			values[j] = rand.Intn(1000)
 		}
 		MergeSort(values)
+		if !isSorted(values) {
+			t.Error(values, "is not sorted")
+		}
+	}
+}
+
+func TestConcMergeSort(t *testing.T) {
+	for i := 0; i < 1000; i++ {
+		values := make([]int, rand.Intn(1000))
+		for j := range values {
+			values[j] = rand.Intn(1000)
+		}
+		ConcMergeSort(values)
 		if !isSorted(values) {
 			t.Error(values, "is not sorted")
 		}

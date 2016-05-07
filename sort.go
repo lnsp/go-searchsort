@@ -81,3 +81,23 @@ func MergeSort(a []int) {
 		a[i] = sorted[i]
 	}
 }
+func ConcMergeSort(a []int) {
+	var sort func([]int, chan []int)
+	sort = func(a []int, c chan []int) {
+		if len(a) < 2 {
+			c <- a
+			return
+		}
+		m := len(a) / 2
+		r := make(chan []int)
+		go sort(a[m:], r)
+		go sort(a[:m], r)
+		c <- mergeSlices(<-r, <-r)
+	}
+	res := make(chan []int)
+	go sort(a, res)
+	sorted := <-res
+	for i, v := range sorted {
+		a[i] = v
+	}
+}
